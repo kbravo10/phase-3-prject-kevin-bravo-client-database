@@ -7,7 +7,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from faker import Faker
 
 #import classes from models
-from models import Client, Doctor, Medication
+from models import Client, Doctor, Medication, Med_times
 
 #import random to random fill values
 import random
@@ -24,6 +24,7 @@ if __name__ == '__main__':
     session.query(Client).delete()
     session.query(Doctor).delete()
     session.query(Medication).delete()
+    session.query(Med_times).delete()
 
     #create an instace of Faker
     fake = Faker()
@@ -49,11 +50,9 @@ if __name__ == '__main__':
             name = fake.unique.name(),
             age = random.randint(1, 100),
             )
+        session.add(client)
+        session.commit()
         clients.append(client)
-    #add and commit clients
-    session.bulk_save_objects(clients)
-    session.commit()
-    session.close()
 
     #add data to medication class
     medications = []
@@ -67,3 +66,20 @@ if __name__ == '__main__':
         session.commit()
         medications.append(med)
 
+
+    med_times = []
+    for client in clients:
+        for i in range(random.randint(2,6)):
+            medication = random.choice(medications)
+            times = Med_times(
+                time_slot = str(4 * (i + 1)) + ':00',
+                dose = str(random.randint(5,20))+ ' mm',
+                client_id = client.id,
+                medication_id = medication.id,
+            )
+
+            med_times.append(times)
+
+    session.bulk_save_objects(med_times)
+    session.commit()
+    session.close()
