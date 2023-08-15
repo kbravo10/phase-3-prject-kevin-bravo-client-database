@@ -9,6 +9,9 @@ class Doctor(Base):
     id = Column(Integer(), primary_key=True)
     email = Column(String())
     phone_number = Column(String())
+
+    def __repr__(self):
+        return f'Doctor {self.id}'
     
 class Client(Base):
     __tablename__ = 'clients'
@@ -16,6 +19,11 @@ class Client(Base):
     id = Column(Integer(), primary_key = True)
     name = Column(String())
     age = Column(Integer())
+
+    def __repr__(self):
+        return f'Client {self.id}: ' +\
+            f'{self.name}' +\
+            f'{self.age} years old \n'
 
 
 class Medication(Base):
@@ -25,3 +33,6 @@ class Medication(Base):
     name = Column(String())
     medication_use = Column(String())
     med_type = Column(String())
+
+    def __repr__(self):
+        return f'Medication {self.id}'
