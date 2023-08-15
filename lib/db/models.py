@@ -7,13 +7,21 @@ class Doctor(Base):
     __tablename__ = 'doctors'
 
     id = Column(Integer(), primary_key=True)
-
+    email = Column(String())
+    phone_number = Column(String())
+    
 class Client(Base):
     __tablename__ = 'clients'
 
     id = Column(Integer(), primary_key = True)
+    name = Column(String())
+    age = Column(Integer())
+
 
 class Medication(Base):
     __tablename__ = 'medications'
 
     id = Column(Integer(), primary_key=True)
+    name = Column(String())
+    medication_use = Column(String())
+    med_type = Column(String())
