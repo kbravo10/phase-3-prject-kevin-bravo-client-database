@@ -55,3 +55,15 @@ if __name__ == '__main__':
     session.commit()
     session.close()
 
+    #add data to medication class
+    medications = []
+    for i in range(10):
+        med = Medication(
+            name = fake.unique.name(),
+            medication_use = fake.unique.sentence(),
+            med_type = fake.unique.name()
+        )
+        session.add(med)
+        session.commit()
+        medications.append(med)
+
