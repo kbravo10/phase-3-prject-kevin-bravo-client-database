@@ -7,3 +7,13 @@ class Doctor(Base):
     __tablename__ = 'doctors'
 
     id = Column(Integer(), primary_key=True)
+
+class Client(Base):
+    __tablename__ = 'clients'
+
+    id = Column(Integer(), primary_key = True)
+
+class Medication(Base):
+    __tablename__ = 'medications'
+
+    id = Column(Integer(), primary_key=True)
