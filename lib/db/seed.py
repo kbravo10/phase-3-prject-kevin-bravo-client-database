@@ -3,6 +3,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
+import ipdb
+
 #import faker to fill database with random but correct type values
 from faker import Faker
 
@@ -46,10 +48,11 @@ if __name__ == '__main__':
     #add data into the Client class and create a sql table
     clients = []
     for i in range(5):
+        doc = random.choice(doctors)
         client = Client(
             name = fake.unique.name(),
             age = random.randint(1, 100),
-            doctor_id = random.choice(doctors)
+            doctor_id = doc.id,
             )
         session.add(client)
         session.commit()
@@ -84,3 +87,4 @@ if __name__ == '__main__':
     session.bulk_save_objects(med_times)
     session.commit()
     session.close()
+ipdb.set_trace()

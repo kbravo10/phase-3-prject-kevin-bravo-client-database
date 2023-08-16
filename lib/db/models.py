@@ -13,13 +13,6 @@ engine = create_engine('sqlite:///client_database.db')
 
 Base = declarative_base(metadata = metadata)
 
-client_medication = Table(
-    'clent_medication',
-    Base.metadata,
-    Column('client_id', ForeignKey('clients.id'), primary_key=True),
-    Column('medication_id', ForeignKey('medications.id'), primary_key=True),
-)
-
 #create a class doctor
 class Doctor(Base):
     __tablename__ = 'doctors'
@@ -32,7 +25,9 @@ class Doctor(Base):
     clients = relationship('Client')
     
     def __repr__(self):
-        return f'Doctor {self.id}: {self.name}, #{self.phone_number}'
+        return f'Doctor {self.id}: {self.name},' +\
+             f'phone # 1-{self.phone_number}, ' +\
+             f'email: {self.email} \n'
     
 class Client(Base):
     __tablename__ = 'clients'
@@ -41,13 +36,16 @@ class Client(Base):
     name = Column(String())
     age = Column(Integer())
 
-    medications = relationship('Medication', secondary=client_medication, back_populates='clients')
+    medications = relationship('Med_times', back_populates='clients')
     doctor_id = Column(Integer(), ForeignKey('doctors.id'))
+
+    doctors = relationship('Doctor')
 
     def __repr__(self):
         return f'Client {self.id}: ' +\
-            f'{self.name}' +\
-            f'{self.age} years old\n'
+            f'{self.name}, ' +\
+            f'{self.age} years old, ' +\
+            f'primary doctor id: {self.doctor_id}'
 
 
 class Medication(Base):
@@ -58,7 +56,7 @@ class Medication(Base):
     medication_use = Column(String())
     med_type = Column(String())
 
-    clients = relationship('Client', secondary=client_medication, back_populates='medications')
+    clients = relationship('Med_times', back_populates='medications')
 
     def __repr__(self):
         return f'Medication {self.id}'
@@ -71,8 +69,12 @@ class Med_times(Base):
     dose = Column(String())
     signed_off = Column(DateTime(), onupdate=func.now)
 
-    client_id = Column(Integer(), ForeignKey('clients.id'))
-    medication_id = Column(Integer(), ForeignKey('medications.id'))
+    client_id = Column(ForeignKey('clients.id'))
+    medication_id = Column(ForeignKey('medications.id'))
+
+    clients = relationship('Client', back_populates='medications')
+    medications = relationship('Medication', back_populates='clients')
  
     def __repr__(self):
-        return f'{self.time_slot} - dose {self.time_slot}, Client id: {self.client_id} - Medication id: {self.medication_id}'
+        return f'{self.time_slot} - dose {self.time_slot}, '+\
+            f'Client id: {self.client_id} - Medication id: {self.medication_id}'
