@@ -68,7 +68,7 @@ class Med_times(Base):
     time_slot = Column(String())
     dose = Column(String())
 
-    signed_off = Column(ForeignKey('user.id'))
+    signed_off = Column(ForeignKey('employees.id'))
     client_id = Column(ForeignKey('clients.id'))
     medication_id = Column(ForeignKey('medications.id'))
 
@@ -82,7 +82,7 @@ class Med_times(Base):
             f'Medication id: {self.medication_id} \n'
 
 class Employee(Base):
-    __tablename__ = 'user'
+    __tablename__ = 'employees'
 
     id = Column(Integer(), primary_key = True)
     name = Column(String())
