@@ -67,8 +67,8 @@ class Med_times(Base):
     id = Column(Integer(), primary_key=True)
     time_slot = Column(String())
     dose = Column(String())
-    signed_off = Column(DateTime(), onupdate=func.now)
 
+    signed_off = Column(ForeignKey('user.id'))
     client_id = Column(ForeignKey('clients.id'))
     medication_id = Column(ForeignKey('medications.id'))
 
@@ -80,3 +80,17 @@ class Med_times(Base):
             f'- dose {self.dose}, '+\
             f'Client id: {self.client_id}, ' +\
             f'Medication id: {self.medication_id} \n'
+
+class Employee(Base):
+    __tablename__ = 'user'
+
+    id = Column(Integer(), primary_key = True)
+    name = Column(String())
+    username = Column(String())
+    password = Column(String())
+
+    med_times = relationship('Med_times')
+
+    def __repr__(self):
+        return f'Employee {self.id}: ' +\
+            f'{self.name} \n'

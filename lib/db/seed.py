@@ -9,7 +9,7 @@ import ipdb
 from faker import Faker
 
 #import classes from models
-from models import Client, Doctor, Medication, Med_times
+from models import Client, Doctor, Medication, Med_times, Employee
 
 #import random to random fill values
 import random
@@ -71,13 +71,26 @@ if __name__ == '__main__':
         medications.append(med)
 
 
+    employees = []
+    for i in range(4):
+        employee = Employee(
+            name = fake.unique.name(),
+            username = fake.unique.email(),
+            password = fake.unique.name(),
+        )
+        session.add(employee)
+        session.commit()
+        employees.append(employee)
+
     med_times = []
     for client in clients:
         for i in range(random.randint(2,6)):
             medication = random.choice(medications)
+            emplee = random.choice(employees)
             times = Med_times(
                 time_slot = str(4 * (i + 1)) + ':00',
                 dose = str(random.randint(5,20))+ ' mm',
+                signed_off = emplee.id,
                 client_id = client.id,
                 medication_id = medication.id,
             )
@@ -86,5 +99,6 @@ if __name__ == '__main__':
 
     session.bulk_save_objects(med_times)
     session.commit()
+
     session.close()
 ipdb.set_trace()
