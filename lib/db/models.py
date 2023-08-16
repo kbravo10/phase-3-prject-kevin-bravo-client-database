@@ -39,13 +39,11 @@ class Client(Base):
     medications = relationship('Med_times', back_populates='clients')
     doctor_id = Column(Integer(), ForeignKey('doctors.id'))
 
-    doctors = relationship('Doctor')
-
     def __repr__(self):
         return f'Client {self.id}: ' +\
             f'{self.name}, ' +\
             f'{self.age} years old, ' +\
-            f'primary doctor id: {self.doctor_id}'
+            f'primary doctor id: {self.doctor_id} \n'
 
 
 class Medication(Base):
@@ -59,7 +57,9 @@ class Medication(Base):
     clients = relationship('Med_times', back_populates='medications')
 
     def __repr__(self):
-        return f'Medication {self.id}'
+        return f'Medication {self.id}, ' +\
+            f'{self.name}, medication description: \n' +\
+            f'\t {self.medication_use} \n\n'
 
 class Med_times(Base):
     __tablename__ = 'med_times'
@@ -76,5 +76,7 @@ class Med_times(Base):
     medications = relationship('Medication', back_populates='clients')
  
     def __repr__(self):
-        return f'{self.time_slot} - dose {self.time_slot}, '+\
-            f'Client id: {self.client_id} - Medication id: {self.medication_id}'
+        return f'time {self.time_slot} ' +\
+            f'- dose {self.dose}, '+\
+            f'Client id: {self.client_id}, ' +\
+            f'Medication id: {self.medication_id} \n'
