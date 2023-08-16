@@ -49,6 +49,7 @@ if __name__ == '__main__':
         client = Client(
             name = fake.unique.name(),
             age = random.randint(1, 100),
+            doctor_id = random.choice(doctors)
             )
         session.add(client)
         session.commit()

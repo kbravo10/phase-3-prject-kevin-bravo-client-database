@@ -1,17 +1,23 @@
 from sqlalchemy import create_engine, func
-from sqlalchemy import ForeignKey, Table, Integer, Column, String, DateTime
+from sqlalchemy import ForeignKey, Table, Integer, Column, String, DateTime, MetaData
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
 
+convention = {
+    "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
+}
+
+metadata = MetaData(naming_convention = convention)
+
 engine = create_engine('sqlite:///client_database.db')
 
-Base = declarative_base()
+Base = declarative_base(metadata = metadata)
 
 client_medication = Table(
     'clent_medication',
     Base.metadata,
     Column('client_id', ForeignKey('clients.id'), primary_key=True),
-    Column('medication_id', ForeignKey('medications.id'), primary_key=True)
+    Column('medication_id', ForeignKey('medications.id'), primary_key=True),
 )
 
 #create a class doctor
@@ -23,7 +29,8 @@ class Doctor(Base):
     email = Column(String())
     phone_number = Column(String())
 
-
+    clients = relationship('Client')
+    
     def __repr__(self):
         return f'Doctor {self.id}: {self.name}, #{self.phone_number}'
     
@@ -35,6 +42,7 @@ class Client(Base):
     age = Column(Integer())
 
     medications = relationship('Medication', secondary=client_medication, back_populates='clients')
+    doctor_id = Column(Integer(), ForeignKey('doctors.id'))
 
     def __repr__(self):
         return f'Client {self.id}: ' +\
