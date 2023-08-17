@@ -44,7 +44,7 @@ class Cli():
     
     #method to help with the cluter by printing empty lines
     def clear_screen(self):
-        print('\n' *5)
+        print('\n' * 3)
 
     #lets the user login if login was chosen
     def login(self):
@@ -72,16 +72,33 @@ class Cli():
     
     #handle option of clients from home screen
     def handle_client_choice(self):
+        self.clear_screen()
         print('You have chosen clients')
+        options = ['View all clients', 'Search by name', 'Search by ID']
+        terminal_menu = TerminalMenu(options)
+        menu_entry_index = terminal_menu.show()
+
+        #call session_creater to start a sesseion
         session = self.session_creator()
-        client = Client(
-            name = 'kevin bravo',
-            age = 29,
-            doctor_id = 2
-        )
-        session.add(client)
-        session.commit()
-        session.close()
+        clients = session.query(Client)
+        self.clear_screen()
+        if options[menu_entry_index] == 'View all clients':
+            print('list of all clients')
+            print(clients.all())
+        elif options[menu_entry_index] == 'Search by name':
+            user_input = input('What is the clients name: ')
+            client_filter_name = clients.filter(Client.name == user_input)
+            self.clear_screen()
+            if client_filter_name.count() != 0:
+                print('Client(s):')
+                for client in client_filter_name:
+                    print(client)
+            else:
+                print(red('There is no client with that name.'))
+        elif options[menu_entry_index] == 'Search by ID':
+            pass
+
+
 
 
 app = Cli()
