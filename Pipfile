@@ -10,6 +10,7 @@ alembic = "*"
 faker = "*"
 prettycli = "*"
 simple-term-menu = "*"
+pandas = "*"
 
 [dev-packages]
 
