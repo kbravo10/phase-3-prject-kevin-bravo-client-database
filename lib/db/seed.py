@@ -27,6 +27,7 @@ if __name__ == '__main__':
     session.query(Doctor).delete()
     session.query(Medication).delete()
     session.query(Med_times).delete()
+    session.query(Employee).delete()
 
     #create an instace of Faker
     fake = Faker()
