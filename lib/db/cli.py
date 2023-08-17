@@ -110,7 +110,8 @@ class Cli():
         #print all of the clients if user wants to view all clients
         if options[menu_entry_index] == 'View all clients':
             print('list of all clients')
-            print(clients.all())
+            for client in clients.all():
+                print(client)
         #Allow the user to enter a specific name and look for that clients information
         elif options[menu_entry_index] == 'Search by name':
             user_input = input('What is the clients name: ')
@@ -181,7 +182,8 @@ class Cli():
         #print all of the medications if user wants to view all medications
         if options[menu_entry_index] == 'View all medications':
             print('list of all medications')
-            print(pd.DataFrame(medications.all()))
+            for med in medications.all():
+                print(med)
         #Allow the user to enter a specific name and look for that medications information
         elif options[menu_entry_index] == 'Search by name':
             user_input = input('What is the medications name: ')
@@ -206,8 +208,24 @@ class Cli():
         self.clear_screen()
 
         #display options for user to choose medication schedule
-
+        options = ['View medication schedule', 'Filter by time']
+        terminal_menu = TerminalMenu(options)
+        menu_entry_index = terminal_menu.show()
         
+        #create a session with the Doctor class
+        session = self.session_creator()
+        medications = session.query(Med_times)
+        self.clear_screen()
+
+        if options[menu_entry_index] == 'View medication schedule':
+            for time in medications.all():
+                print(time)
+        
+        elif options[menu_entry_index] == 'Filter by time':
+            user_input = input('What time slot would you want to view ( 16:00 = 04:00 apm): ')
+            med_times_filter = medications.filter(Med_times.time_slot == user_input)
+            for times in med_times_filter:
+                print(times)
 
 
 
