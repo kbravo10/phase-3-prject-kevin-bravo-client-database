@@ -10,7 +10,7 @@ import random
 import time
 import pandas as pd
 import ipdb
-from prettycli import red, green
+from prettycli import red, green, yellow
 from simple_term_menu import TerminalMenu
 from  models import Doctor, Med_times, Client, Medication
 
@@ -32,7 +32,7 @@ class Cli():
     #method start to prompt the user how to start and the options
     def start(self):
         self.clear_screen()
-        print('Welcome... Please choose an option: \n')
+        print(yellow('Welcome... Please choose an option: \n'))
 
         #use simple term menu to get user input for choice to log in or exit
         options = ['Login', 'Exit']
@@ -44,16 +44,13 @@ class Cli():
             self.exit()
         else:
             self.login()
-        
         self.clear_screen()
-    
-   
 
     #lets the user login if login was chosen
     def login(self):
         self.clear_screen()
         print('Please Log in: ')
-        user_input = input('email: ')
+        user_input = input(yellow('email: '))
         self.home_screen()
 
     #lets the user leave the program
@@ -100,7 +97,7 @@ class Cli():
         return_home = False
         while return_home == False:
             self.clear_screen()
-            print('Choose an option: \n')
+            print(yellow('Choose an option: \n'))
             #display the users option when client is chosen 
             options = ['View all clients', 'Search by name', 'Search by ID', 'Return to main screen']
             terminal_menu = TerminalMenu(options)
@@ -113,7 +110,7 @@ class Cli():
 
             #print all of the clients if user wants to view all clients
             if options[menu_entry_index] == 'View all clients':
-                print('list of all clients: \n')
+                print(green('LIST OF ALL CLIENTS:'))
                 for client in clients.all():
                     print(client)
                 
@@ -121,21 +118,27 @@ class Cli():
 
             #Allow the user to enter a specific name and look for that clients information
             elif options[menu_entry_index] == 'Search by name':
-                user_input = input('What is the clients name: ')
+                user_input = input(yellow('What is the clients name: '))
                 client_filter_name = clients.filter(Client.name == user_input)
                 self.clear_screen()
                 if client_filter_name.count() != 0:
-                    print('Client(s):')
+                    print(green('Client(s):'))
                     for client in client_filter_name:
                         print(client)
-                        print(f'medication times: \n{client.medications}')
+                        print(green(f'Medications perscribed: '))
+                        for meds in client.medications:
+                            print(meds.medications.name)
+                            
+                        print(green(f'Medication schedule for {client.name}'))
+                        for times in client.medications:
+                            print(times)
                 
                 else:
                     print(red('There is no client with that name.'))
             
             #Allow the user to search a client with there id number
             elif options[menu_entry_index] == 'Search by ID':
-                user_input = input('What is the clients id: ')
+                user_input = input(yellow('What is the clients id: '))
                 client_filter_id = clients.filter(Client.id == user_input)
                 if client_filter_id.count() != 0:
                     for client in client_filter_id:
@@ -144,8 +147,8 @@ class Cli():
                     print(red('There is no client with that id.'))
             else:
                 return_home = True
+            time.sleep(1)
         
-        time.sleep(2)
         self.home_screen()
         
 
@@ -167,30 +170,33 @@ class Cli():
 
             #handle option to see all the doctors
             if options[menu_entry_index] == 'View all doctors':
+                print(green('LIST OF ALL DOCTORS: '))
                 for doctor in doctors.all():
                     print(doctor)
             #handle search by name
             elif options[menu_entry_index] == 'Search by name':
-                user_input = input('Enter the doctors name: ')
+                user_input = input(yellow('Enter the doctors name: '))
                 doctor_filter_name = doctors.filter(Doctor.name == user_input)
 
                 if doctor_filter_name.count() != 0:
+                    print(green('Doctor(s): '))
                     for doc in doctor_filter_name:
                         print(doc)
                 else:
                     print(red('There is no doctor with that name on the database.'))
             elif options[menu_entry_index] == 'Search by ID':
-                user_input = input('Enter the doctors ID: ')
+                user_input = input(yellow('Enter the doctors ID: '))
                 doctor_filter_id = doctors.filter(Doctor.id == user_input)
                 
                 if doctor_filter_id.count() != 0:
+                    print(green('Doctor: '))
                     print(doctor_filter_id[0])
                 else:
                     print(red('There is no doctor with this ID.'))
             else:
                 return_home = True
+            time.sleep(1)
 
-        time.sleep(1)
         self.home_screen()
 
     def handle_medication_choice(self):
@@ -211,23 +217,26 @@ class Cli():
 
             #print all of the medications if user wants to view all medications
             if options[menu_entry_index] == 'View all medications':
-                print('list of all medications \n')
+                print(green('LIST OF ALL MEDICATIONS: \n'))
                 for med in medications.all():
                     print(med)
             #Allow the user to enter a specific name and look for that medications information
             elif options[menu_entry_index] == 'Search by name':
-                user_input = input('What is the medications name: ')
+                user_input = input(yellow('What is the medications name: '))
                 medication_filter_name = medications.filter(Medication.name == user_input)
                 self.clear_screen()
                 if medication_filter_name.count() != 0:
-                    print('Medications(s):')
+                    print(green('Medications(s):'))
                     for meds in medication_filter_name:
                         print(meds)
+                        print(green(f'List of clients on Medication- {meds.name}:'))
+                        for client in meds.clients:
+                            print(f'{client.clients.name}, ID: {client.clients.id}')
                 else:
                     print(red('There is no medication with that name.'))
             #Allow the user to search a medications with there id number
             elif options[menu_entry_index] == 'Search by ID':
-                user_input = input('What is the medication id: ')
+                user_input = input(yellow('What is the medication id: '))
                 medication_filter_id = medications.filter(Medication.id == user_input)
                 if medication_filter_id.count() != 0:
                     print(medication_filter_id[0])
@@ -235,8 +244,8 @@ class Cli():
                     print(red('There is no medication with that id.'))
             else:
                 return_home = True
+            time.sleep(1)
 
-        time.sleep(2)
         self.home_screen()
 
     def handle_med_schedule_choice(self):
@@ -255,12 +264,16 @@ class Cli():
             self.clear_screen()
 
             if options[menu_entry_index] == 'View medication schedule':
+                print(green('MEDICATION SCHEDULE: '))
                 for times in medications.all():
                     print(times)
             
             elif options[menu_entry_index] == 'Filter by time':
-                user_input = input('What time slot would you want to view ( 16:00 = 04:00 apm): ')
+                user_input = input(yellow('What time slot would you want to view ( 16:00 = 04:00 apm): '))
                 med_times_filter = medications.filter(Med_times.time_slot == user_input)
+
+
+                print(green(f'List of {user_input}:'))
                 for times in med_times_filter:
                     print(times)
             else:
@@ -268,7 +281,6 @@ class Cli():
             
             time.sleep(1)
        
-        time.sleep(1)
         self.home_screen()
 
 
