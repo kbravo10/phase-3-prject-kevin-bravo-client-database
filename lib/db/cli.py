@@ -54,7 +54,7 @@ class Cli():
         self.clear_screen()
         print('Please Log in: ')
         user_input = input('email: ')
-        self.home_screen(user_input)
+        self.home_screen()
 
     #lets the user leave the program
     def exit(self):
@@ -62,10 +62,10 @@ class Cli():
         print('Thank you. Bye!')
 
     #home screen that gives userr options of clients, medications and doctors
-    def home_screen(self, user):
+    def home_screen(self):
         self.clear_screen()
         #display welcome message and propmt the user to select a choice
-        print(f'Welcome {user}')
+        print(f'Welcome')
         options = ['Clients', 'Doctors', 'Medications',  'Medication Schedule']
         terminal_menu = TerminalMenu(options)
         menu_entry_index = terminal_menu.show()
@@ -96,9 +96,9 @@ class Cli():
     #handle option of clients from home screen
     def handle_client_choice(self):
         self.clear_screen()
-
+        print('Choose an option: \n')
         #display the users option when client is chosen 
-        options = ['View all clients', 'Search by name', 'Search by ID']
+        options = ['View all clients', 'Search by name', 'Search by ID', 'Return to main screen']
         terminal_menu = TerminalMenu(options)
         menu_entry_index = terminal_menu.show()
 
@@ -112,6 +112,9 @@ class Cli():
             print('list of all clients')
             for client in clients.all():
                 print(client)
+            time.sleep(2)
+            self.handle_client_choice()
+
         #Allow the user to enter a specific name and look for that clients information
         elif options[menu_entry_index] == 'Search by name':
             user_input = input('What is the clients name: ')
@@ -121,6 +124,8 @@ class Cli():
                 print('Client(s):')
                 for client in client_filter_name:
                     print(client)
+                    print(f'medication times: \n{client.medications}')
+            
             else:
                 print(red('There is no client with that name.'))
         #Allow the user to search a client with there id number
@@ -131,6 +136,9 @@ class Cli():
                 print(client_filter_id[0])
             else:
                 print(red('There is no client with that id.'))
+        else:
+            self.home_screen()
+        
 
     def handle_doctor_choice(self):
         self.clear_screen()
