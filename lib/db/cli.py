@@ -97,139 +97,147 @@ class Cli():
     
     #handle option of clients from home screen
     def handle_client_choice(self):
-        self.clear_screen()
-        print('Choose an option: \n')
-        #display the users option when client is chosen 
-        options = ['View all clients', 'Search by name', 'Search by ID', 'Return to main screen']
-        terminal_menu = TerminalMenu(options)
-        menu_entry_index = terminal_menu.show()
-
-        #call session_creater to start a sesseion
-        session = self.session_creator()
-        clients = session.query(Client)
-        self.clear_screen()
-
-        #print all of the clients if user wants to view all clients
-        if options[menu_entry_index] == 'View all clients':
-            print('list of all clients: \n')
-            for client in clients.all():
-                print(client)
-            
-            
-
-        #Allow the user to enter a specific name and look for that clients information
-        elif options[menu_entry_index] == 'Search by name':
-            user_input = input('What is the clients name: ')
-            client_filter_name = clients.filter(Client.name == user_input)
+        return_home = False
+        while return_home == False:
             self.clear_screen()
-            if client_filter_name.count() != 0:
-                print('Client(s):')
-                for client in client_filter_name:
+            print('Choose an option: \n')
+            #display the users option when client is chosen 
+            options = ['View all clients', 'Search by name', 'Search by ID', 'Return to main screen']
+            terminal_menu = TerminalMenu(options)
+            menu_entry_index = terminal_menu.show()
+
+            #call session_creater to start a sesseion
+            session = self.session_creator()
+            clients = session.query(Client)
+            self.clear_screen()
+
+            #print all of the clients if user wants to view all clients
+            if options[menu_entry_index] == 'View all clients':
+                print('list of all clients: \n')
+                for client in clients.all():
                     print(client)
-                    print(f'medication times: \n{client.medications}')
+                
+                
+
+            #Allow the user to enter a specific name and look for that clients information
+            elif options[menu_entry_index] == 'Search by name':
+                user_input = input('What is the clients name: ')
+                client_filter_name = clients.filter(Client.name == user_input)
+                self.clear_screen()
+                if client_filter_name.count() != 0:
+                    print('Client(s):')
+                    for client in client_filter_name:
+                        print(client)
+                        print(f'medication times: \n{client.medications}')
+                
+                else:
+                    print(red('There is no client with that name.'))
             
+            #Allow the user to search a client with there id number
+            elif options[menu_entry_index] == 'Search by ID':
+                user_input = input('What is the clients id: ')
+                client_filter_id = clients.filter(Client.id == user_input)
+                if client_filter_id.count() != 0:
+                    for client in client_filter_id:
+                        print(client)
+                else:
+                    print(red('There is no client with that id.'))
             else:
-                print(red('There is no client with that name.'))
-        
-        #Allow the user to search a client with there id number
-        elif options[menu_entry_index] == 'Search by ID':
-            user_input = input('What is the clients id: ')
-            client_filter_id = clients.filter(Client.id == user_input)
-            if client_filter_id.count() != 0:
-                for client in client_filter_id:
-                    print(client)
-            else:
-                print(red('There is no client with that id.'))
-        else:
-            self.home_screen()
+                return_home = True
         
         time.sleep(2)
-        self.handle_client_choice()
+        self.home_screen()
         
 
     def handle_doctor_choice(self):
-        self.clear_screen()
+        return_home = False
+        while return_home == False:
 
-        #display options for doctor class and prompt user to select
-        options = ['View all doctors', 'Search by name', 'Search by ID', 'Return to main screen']
-        terminal_menu = TerminalMenu(options)
-        menu_entry_index = terminal_menu.show()
-        
-        #create a session with the Doctor class
-        session = self.session_creator()
-        doctors = session.query(Doctor)
-        self.clear_screen()
+            self.clear_screen()
 
-        #handle option to see all the doctors
-        if options[menu_entry_index] == 'View all doctors':
-            for doctor in doctors.all():
-                print(doctor)
-        #handle search by name
-        elif options[menu_entry_index] == 'Search by name':
-            user_input = input('Enter the doctors name: ')
-            doctor_filter_name = doctors.filter(Doctor.name == user_input)
-
-            if doctor_filter_name.count() != 0:
-                for doc in doctor_filter_name:
-                    print(doc)
-            else:
-                print(red('There is no doctor with that name on the database.'))
-        elif options[menu_entry_index] == 'Search by ID':
-            user_input = input('Enter the doctors ID: ')
-            doctor_filter_id = doctors.filter(Doctor.id == user_input)
+            #display options for doctor class and prompt user to select
+            options = ['View all doctors', 'Search by name', 'Search by ID', 'Return to main screen']
+            terminal_menu = TerminalMenu(options)
+            menu_entry_index = terminal_menu.show()
             
-            if doctor_filter_id.count() != 0:
-                print(doctor_filter_id[0])
-            else:
-                print(red('There is no doctor with this ID.'))
-        else:
-            self.home_screen()
+            #create a session with the Doctor class
+            session = self.session_creator()
+            doctors = session.query(Doctor)
+            self.clear_screen()
 
-        time.sleep(2)
-        self.handle_doctor_choice()
+            #handle option to see all the doctors
+            if options[menu_entry_index] == 'View all doctors':
+                for doctor in doctors.all():
+                    print(doctor)
+            #handle search by name
+            elif options[menu_entry_index] == 'Search by name':
+                user_input = input('Enter the doctors name: ')
+                doctor_filter_name = doctors.filter(Doctor.name == user_input)
+
+                if doctor_filter_name.count() != 0:
+                    for doc in doctor_filter_name:
+                        print(doc)
+                else:
+                    print(red('There is no doctor with that name on the database.'))
+            elif options[menu_entry_index] == 'Search by ID':
+                user_input = input('Enter the doctors ID: ')
+                doctor_filter_id = doctors.filter(Doctor.id == user_input)
+                
+                if doctor_filter_id.count() != 0:
+                    print(doctor_filter_id[0])
+                else:
+                    print(red('There is no doctor with this ID.'))
+            else:
+                return_home = True
+
+        time.sleep(1)
+        self.home_screen()
 
     def handle_medication_choice(self):
-        self.clear_screen()
+        return_home = False
+        while return_home == False:
 
-        #display options for medications class and prompt user to select
-        options = ['View all medications', 'Search by name', 'Search by ID', 'Return to main screen']
-        terminal_menu = TerminalMenu(options)
-        menu_entry_index = terminal_menu.show()
-        
-        #create a session with the Doctor class
-        session = self.session_creator()
-        medications = session.query(Medication)
-        self.clear_screen()
-
-        #print all of the medications if user wants to view all medications
-        if options[menu_entry_index] == 'View all medications':
-            print('list of all medications \n')
-            for med in medications.all():
-                print(med)
-        #Allow the user to enter a specific name and look for that medications information
-        elif options[menu_entry_index] == 'Search by name':
-            user_input = input('What is the medications name: ')
-            medication_filter_name = medications.filter(Medication.name == user_input)
             self.clear_screen()
-            if medication_filter_name.count() != 0:
-                print('Medications(s):')
-                for meds in medication_filter_name:
-                    print(meds)
+
+            #display options for medications class and prompt user to select
+            options = ['View all medications', 'Search by name', 'Search by ID', 'Return to main screen']
+            terminal_menu = TerminalMenu(options)
+            menu_entry_index = terminal_menu.show()
+            
+            #create a session with the Doctor class
+            session = self.session_creator()
+            medications = session.query(Medication)
+            self.clear_screen()
+
+            #print all of the medications if user wants to view all medications
+            if options[menu_entry_index] == 'View all medications':
+                print('list of all medications \n')
+                for med in medications.all():
+                    print(med)
+            #Allow the user to enter a specific name and look for that medications information
+            elif options[menu_entry_index] == 'Search by name':
+                user_input = input('What is the medications name: ')
+                medication_filter_name = medications.filter(Medication.name == user_input)
+                self.clear_screen()
+                if medication_filter_name.count() != 0:
+                    print('Medications(s):')
+                    for meds in medication_filter_name:
+                        print(meds)
+                else:
+                    print(red('There is no medication with that name.'))
+            #Allow the user to search a medications with there id number
+            elif options[menu_entry_index] == 'Search by ID':
+                user_input = input('What is the medication id: ')
+                medication_filter_id = medications.filter(Medication.id == user_input)
+                if medication_filter_id.count() != 0:
+                    print(medication_filter_id[0])
+                else:
+                    print(red('There is no medication with that id.'))
             else:
-                print(red('There is no medication with that name.'))
-        #Allow the user to search a medications with there id number
-        elif options[menu_entry_index] == 'Search by ID':
-            user_input = input('What is the medication id: ')
-            medication_filter_id = medications.filter(Medication.id == user_input)
-            if medication_filter_id.count() != 0:
-                print(medication_filter_id[0])
-            else:
-                print(red('There is no medication with that id.'))
-        else:
-            self.home_screen()
+                return_home = True
 
         time.sleep(2)
-        self.handle_medication_choice()
+        self.home_screen()
 
     def handle_med_schedule_choice(self):
         return_home = False
