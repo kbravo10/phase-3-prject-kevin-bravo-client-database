@@ -91,7 +91,7 @@ if __name__ == '__main__':
             times = Med_times(
                 time_slot = str(4 * (i + 1)) + ':00',
                 dose = str(random.randint(5,20))+ ' mm',
-                signed_off = emplee.id,
+                signed_off = '',
                 client_id = client.id,
                 medication_id = medication.id,
             )

@@ -79,7 +79,8 @@ class Med_times(Base):
         return f'time {self.time_slot} ' +\
             f'- dose {self.dose}, '+\
             f'Client id: {self.client_id}, ' +\
-            f'Medication id: {self.medication_id} \n'
+            f'Medication id: {self.medication_id} \n ' +\
+            f'\t Employee ID sign off: {self.signed_off} \n'
 
 class Employee(Base):
     __tablename__ = 'employees'
