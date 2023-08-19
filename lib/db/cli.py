@@ -265,8 +265,15 @@ class Cli():
                 client_id = input(yellow('Enter a clients ID: '))
                 time_slot = input(yellow('Enter the time: '))
                 x = medications.filter(Med_times.client_id == client_id)
-                y = x.filter(Med_times.time_slot == time_slot)
+                y = x.filter(Med_times.time_slot == time_slot) 
                 print(y[0])
+                user_input = input(green('Is this correct? (Y/N): '))
+                if 'y' or 'Y' or 'yes' or 'Yes':
+                    y[0].update({y.signed_off: self.current_user.id})
+                    session.commit()
+               
+
+
 
             else:
                 return_home = True
