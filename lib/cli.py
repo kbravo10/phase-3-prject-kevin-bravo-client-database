@@ -1,9 +1,3 @@
-#import all necessary libraries from sqlalchemy
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
-
-from faker import Faker
 
 #import random to random fill values
 import random
@@ -14,8 +8,6 @@ from simple_term_menu import TerminalMenu
 from  db.models import Doctor, Med_times, Client, Medication, Employee
 import create_inputs as create 
 import sessions
-
-Base = declarative_base()
 
 class Cli():
     #variable that keeps track of person logged in
@@ -69,7 +61,7 @@ class Cli():
         self.clear_screen()
         #display welcome message and propmt the user to select a choice
         print(green('Welcome ')  + yellow(f'{self.current_user.name} \n'))
-        options = ['Clients', 'Doctors', 'Medications',  'Medication Schedule', 'ADD INFORMATION', 'EXIT']
+        options = ['Clients', 'Doctors', 'Medications',  'Medication Schedule', 'ADD INFORMATION', 'LOGOUT', 'EXIT']
         terminal_menu = TerminalMenu(options)
         menu_entry_index = terminal_menu.show()
         #if the user chooses clients then take them to the handle_client_choice method
@@ -93,7 +85,12 @@ class Cli():
             time.sleep(1)
             self.handle_med_schedule_choice()
         elif options[menu_entry_index] == 'ADD INFORMATION':
-            create.handle_add_med_times()
+            self.handle_add_info()
+        
+        elif options[menu_entry_index] == 'LOGOUT':
+            print(f'Logging out. Bye {self.current_user.name}!')
+            time.sleep(1)
+            self.start()
         elif options[menu_entry_index] == 'EXIT':
             self.exit()
         self.clear_screen()
@@ -265,14 +262,22 @@ class Cli():
                     print(sign_off_time[0].signed_off)
                     sign_off_time[0].signed_off = self.current_user.id
                     sessions.session_create().commit()
-               
-
-
-
             else:
                 return_home = True
             time.sleep(1)
         self.home_screen()
+    
+    def handle_add_info(self):
+        print('What information would you like to add: ')
+        options = ['Client', 'Medication Scheduling']
+        terminal_menu = TerminalMenu(options)
+        menu_entry_index = terminal_menu.show()
+
+        if options[menu_entry_index] == 'Client':
+            create.handle_add_client()
+        elif options[menu_entry_index] == 'Medication Scheduling':
+            create.handle_add_med_times()
+
 
 app = Cli()
 app.start()
