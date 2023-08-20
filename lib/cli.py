@@ -4,6 +4,7 @@ import time
 from prettycli import red, green, yellow
 from simple_term_menu import TerminalMenu
 from  db.models import Doctor, Med_times, Client, Medication, Employee
+import art
 import modify_database as modify
 import sessions
 import helpers
@@ -19,6 +20,7 @@ class Cli():
     #method start to prompt the user how to start and the options
     def start(self):
         self.clear_screen()
+        art.tprint('DOCTOR-KEVIN-HOUSE')
         print(yellow('Welcome... Please choose an option: \n'))
         #use simple term menu to get user input for choice to log in or exit
         options = ['Login', 'Exit']
@@ -35,6 +37,7 @@ class Cli():
     def login(self):
         self.clear_screen()
         logged_in = False
+        art.tprint('EMPLOYEE-LOGIN')
         print('Please Log in: ') 
         print('FOR TESTING YOU CAN USE: ')
         print(green('userOne@google.com'))
@@ -61,6 +64,7 @@ class Cli():
     #home screen that gives userr options of clients, medications and doctors
     def home_screen(self):
         self.clear_screen()
+        art.tprint('HOME')
         #display welcome message and propmt the user to select a choice
         print(green('Welcome ')  + yellow(f'{self.current_user.name} \n'))
         options = ['Clients', 'Doctors', 'Medications',  'Medication Schedule/Sign off time sheet', 'ADD/REMOVE INFORMATION', 'LOGOUT', 'EXIT']
@@ -105,6 +109,7 @@ class Cli():
         #while loop to loop on method until user ready to leave
         while return_home == False:
             self.clear_screen()
+            art.tprint("CLIENT'S")
             print(yellow('Choose an option: \n'))
             #display the users option when client is chosen 
             options = ['View all clients', 'Search by name', 'Search by ID', 'Return to main screen']
@@ -163,6 +168,7 @@ class Cli():
 
         while return_home == False:
             self.clear_screen()
+            art.tprint("DOCTOR'S")
             print('Choose and option: ')
             #display options for doctor class and prompt user to select
             options = ['View all doctors', 'Search by name', 'Search by ID', 'Return to main screen']
@@ -211,6 +217,7 @@ class Cli():
         return_home = False
         while return_home == False:
             self.clear_screen()
+            art.tprint("MEDICATION'S")
             print('Choose an option: ')
             #display options for medications class and prompt user to select
             options = ['View all medications', 'Search by name', 'Search by ID', 'Return to main screen']
@@ -259,6 +266,7 @@ class Cli():
         return_home = False
         while return_home == False:
             self.clear_screen()
+            art.tprint("MEDICINE-SCHEDULE")
             print('Choose an option: ')
             #display options for user to choose medication schedule
             options = ['Sign Off medication time slot', 'View medication schedule', 'Filter by time', 'Return to main screen']
@@ -304,6 +312,8 @@ class Cli():
     def handle_modify_info(self): 
         return_home = False
         while return_home == False:
+            self.clear_screen()
+            art.tprint("MODIFY-TABLES'S")
             print('What would you like to do? ')
             modify_options = ['Remove', 'Add', 'Return to main window']
             modify_terminal_menu = TerminalMenu(modify_options)

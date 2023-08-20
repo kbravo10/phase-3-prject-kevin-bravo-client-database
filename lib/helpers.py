@@ -1,4 +1,4 @@
-from prettycli import red, green, yellow
+from prettycli import red, yellow
 from simple_term_menu import TerminalMenu
 
 def time_slots():

@@ -1,7 +1,5 @@
 import sessions
-from prettycli import red, yellow, green
-import time
-from simple_term_menu import TerminalMenu
+from prettycli import red
 import helpers
 
 from  db.models import Doctor, Med_times, Client, Medication, Employee

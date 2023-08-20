@@ -11,6 +11,7 @@ faker = "*"
 prettycli = "*"
 simple-term-menu = "*"
 pandas = "*"
+art = "*"
 
 [dev-packages]
 
