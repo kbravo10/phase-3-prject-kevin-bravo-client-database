@@ -3,6 +3,7 @@ from prettycli import red, yellow, green
 import time
 from simple_term_menu import TerminalMenu
 import helpers
+import validate
 
 from  db.models import Doctor, Med_times, Client, Medication, Employee
 
@@ -34,12 +35,10 @@ def handle_add_med_times(user):
     
     new_time_slot = helpers.time_slots()
     new_dose = 'NA'
-
-
-    new_client_id = input(yellow('Enter the clients ID: '))
+    new_client_id = validate.validate_client_id()
     new_med_id = input(yellow('Enter the ID of the medication: '))
     sign_off = input(yellow('Are you signing off this slot? Y/N: '))
-    new_sign_off = ''
+    new_sign_off = 'NOT SIGNED OFF'
     if sign_off == 'y'or sign_off =='Y'or sign_off =='Yes'or sign_off =='yes':
         new_sign_off = user
     new_medicatiion_slot = Med_times(
