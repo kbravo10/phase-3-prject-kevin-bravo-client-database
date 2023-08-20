@@ -8,10 +8,8 @@ from  db.models import Doctor, Med_times, Client, Medication, Employee
 
 def handle_add_client():
     new_client_name = input(yellow('New client name: '))
-    new_client_age = helpers.check_if_integer()
+    new_client_age = helpers.check_if_integer('New client age: ')
     doc_options = sessions.create_doctor_session()
-    print(new_client_age)
-    
     print(yellow('What is the new clients primary doctor: '))
     options = []
     for i in doc_options:

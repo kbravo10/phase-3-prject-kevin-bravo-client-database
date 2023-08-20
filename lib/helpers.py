@@ -11,8 +11,8 @@ def time_slots():
     print(options[menu_entry_index])
     return(options[menu_entry_index])
 
-def check_if_integer(user_promp = 'Enter number: '):
-    num = input(user_promp)
+def check_if_integer(user_promp):
+    num = input(yellow(user_promp))
     if num.isdigit():
             return int(num)
     else:
