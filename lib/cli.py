@@ -61,7 +61,7 @@ class Cli():
         self.clear_screen()
         #display welcome message and propmt the user to select a choice
         print(green('Welcome ')  + yellow(f'{self.current_user.name} \n'))
-        options = ['Clients', 'Doctors', 'Medications',  'Medication Schedule', 'ADD INFORMATION', 'LOGOUT', 'EXIT']
+        options = ['Clients', 'Doctors', 'Medications',  'Medication Schedule/Sign off time sheet', 'ADD INFORMATION', 'LOGOUT', 'EXIT']
         terminal_menu = TerminalMenu(options)
         menu_entry_index = terminal_menu.show()
         #if the user chooses clients then take them to the handle_client_choice method
@@ -80,7 +80,7 @@ class Cli():
             time.sleep(1)
             self.handle_medication_choice()
         #user selects Medication schedule
-        elif options[menu_entry_index] == 'Medication Schedule':
+        elif options[menu_entry_index] == 'Medication Schedule/Sign off time sheet':
             print('You have selected medication schedule.')
             time.sleep(1)
             self.handle_med_schedule_choice()
@@ -267,16 +267,22 @@ class Cli():
             time.sleep(1)
         self.home_screen()
     
-    def handle_add_info(self):
-        print('What information would you like to add: ')
-        options = ['Client', 'Medication Scheduling']
-        terminal_menu = TerminalMenu(options)
-        menu_entry_index = terminal_menu.show()
+    def handle_add_info(self): 
+        return_home = False
+        while return_home == False:
+            print('What information would you like to add: ')
+            options = ['Client', 'Medication Scheduling', 'Return to main window']
+            terminal_menu = TerminalMenu(options)
+            menu_entry_index = terminal_menu.show()
 
-        if options[menu_entry_index] == 'Client':
-            create.handle_add_client()
-        elif options[menu_entry_index] == 'Medication Scheduling':
-            create.handle_add_med_times()
+            if options[menu_entry_index] == 'Client':
+                create.handle_add_client()
+            elif options[menu_entry_index] == 'Medication Scheduling':
+                create.handle_add_med_times(self.current_user.id)
+            elif options[menu_entry_index] == 'Return to main window':
+                return_home = True 
+        time.sleep(1)
+        self.home_screen()
 
 
 app = Cli()
