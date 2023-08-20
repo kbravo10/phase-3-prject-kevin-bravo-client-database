@@ -258,6 +258,7 @@ class Cli():
         return_home = False
         while return_home == False:
             self.clear_screen()
+            print('Choose an option: ')
             #display options for user to choose medication schedule
             options = ['Sign Off medication time slot', 'View medication schedule', 'Filter by time', 'Return to main screen']
             terminal_menu = TerminalMenu(options)
@@ -265,21 +266,20 @@ class Cli():
             #create a session with the Doctor class
             medications = sessions.create_med_times_session()
             self.clear_screen()
-
+            #display the entire medication schedule
             if options[menu_entry_index] == 'View medication schedule':
                 print(green('MEDICATION SCHEDULE: '))
                 for times in medications.all():
                     print(times)
-
+            #filters and displays depending on name
             elif options[menu_entry_index] == 'Filter by time':
                 print(yellow('What time slot would you want to view ( 16:00 = 04:00 apm): '))
                 user_input = helpers.time_slots()
                 med_times_filter = medications.filter(Med_times.time_slot == user_input)
-
                 print(green(f'List of {user_input}:'))
                 for times in med_times_filter:
                     print(times)
-
+            #filters and displays a pecific time
             elif options[menu_entry_index] == 'Sign Off medication time slot':
                 print(green('Enter the client information and the time slot you want to sign off.'))
                 client_id = input(yellow('Enter a clients ID: '))
@@ -288,13 +288,16 @@ class Cli():
                 sign_off_time = client_id_signoff.filter(Med_times.time_slot == time_slot) 
                 print(sign_off_time[0])
                 user_input = input(green('Is this correct? (Y/N): '))
-                if 'y' or 'Y' or 'yes' or 'Yes':
-                    print(sign_off_time[0].signed_off)
+                if user_input == 'y'or user_input =='Y' or user_input =='yes'or user_input == 'Yes':
                     sign_off_time[0].signed_off = self.current_user.id
                     sessions.session_create().commit()
+                    print(yellow(str(sign_off_time[0]))) 
+                    print(green('\thas been signed by you.')) 
+                else:
+                    print(red('SIGN OFF WAS NOT SUCCESSFUL'))
             else:
                 return_home = True
-            time.sleep(1)
+            input(yellow('Press any key When ready.'))
         self.home_screen()
     
     def handle_modify_info(self): 

@@ -32,15 +32,15 @@ def handle_add_client():
 
 def handle_add_med_times(user):
     
-    new_time_slot = input(yellow('Choose a time slot: '))
-    new_dose = input(yellow('Enter a new dose amout: '))
+    new_time_slot = helpers.time_slots()
+    new_dose = 'NA'
 
 
     new_client_id = input(yellow('Enter the clients ID: '))
     new_med_id = input(yellow('Enter the ID of the medication: '))
     sign_off = input(yellow('Are you signing off this slot? Y/N: '))
     new_sign_off = ''
-    if sign_off == 'y'or 'Y'or'Yes'or 'yes':
+    if sign_off == 'y'or sign_off =='Y'or sign_off =='Yes'or sign_off =='yes':
         new_sign_off = user
     new_medicatiion_slot = Med_times(
         time_slot = new_time_slot,
