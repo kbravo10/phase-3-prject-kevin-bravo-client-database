@@ -35,7 +35,7 @@ class Client(Base):
     id = Column(Integer(), primary_key = True)
     name = Column(String())
     age = Column(Integer())
-
+    
     medications = relationship('Med_times', back_populates='clients')
     doctor_id = Column(Integer(), ForeignKey('doctors.id'))
 

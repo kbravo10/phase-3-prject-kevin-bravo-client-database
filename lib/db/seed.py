@@ -60,11 +60,17 @@ if __name__ == '__main__':
         clients.append(client)
 
     #add data to medication class
+    meds = {
+        'Adderall':'Adderall is used to treat attention deficit hyperactivity disorder (ADHD) and narcolepsy. Adderall contains a combination of amphetamine and dextroamphetamine. Amphetamine and dextroamphetamine are central nervous system stimulants that affect chemicals in the brain and nerves that contribute to hyperactivity and impulse control.',
+
+    }
     medications = []
-    for i in range(10):
+    print(len(meds))
+    print(meds.values())
+    for x in range(10):
         med = Medication(
             name = fake.unique.name(),
-            medication_use = fake.unique.sentence(),
+            medication_use = fake.unique.email(),
             med_type = fake.unique.name()
         )
         session.add(med)
