@@ -339,7 +339,7 @@ class Cli():
                         modify.remove_med_time()
                 elif options[menu_entry_index] == 'Return to main window':
                     return_home = True 
-        time.sleep(1)
+            input(yellow('Press any key When ready.'))
         self.home_screen()
 
 app = Cli()
