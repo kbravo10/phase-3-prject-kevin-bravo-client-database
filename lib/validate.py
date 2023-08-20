@@ -15,3 +15,13 @@ def validate_client_id():
             return int(user_input)
         else:
             print(red('There is no client with that id.'))
+
+def validate_medication_id():
+    valid = False
+    while valid == False:
+        user_input = helpers.check_if_integer('Enter medication id: ')
+        validate_client = sessions.create_medication_session().filter(Medication.id == user_input)
+        if validate_client.count() != 0:
+            return int(user_input)
+        else:
+            print(red('There is no medication with that id.'))

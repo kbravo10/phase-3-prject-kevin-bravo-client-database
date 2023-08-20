@@ -36,7 +36,7 @@ def handle_add_med_times(user):
     new_time_slot = helpers.time_slots()
     new_dose = 'NA'
     new_client_id = validate.validate_client_id()
-    new_med_id = input(yellow('Enter the ID of the medication: '))
+    new_med_id = validate.validate_medication_id()
     sign_off = input(yellow('Are you signing off this slot? Y/N: '))
     new_sign_off = 'NOT SIGNED OFF'
     if sign_off == 'y'or sign_off =='Y'or sign_off =='Yes'or sign_off =='yes':
