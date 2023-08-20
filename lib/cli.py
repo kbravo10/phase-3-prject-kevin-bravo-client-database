@@ -8,6 +8,7 @@ from simple_term_menu import TerminalMenu
 from  db.models import Doctor, Med_times, Client, Medication, Employee
 import create_inputs as create 
 import sessions
+import helpers
 
 class Cli():
     #variable that keeps track of person logged in
@@ -138,7 +139,7 @@ class Cli():
                     for client in client_filter_id:
                         print(client)
                 else:
-                    print(red('There is no client with that id.'))
+                    print(red('invalid...There is no client with that id.'))
             else:
                 return_home = True
             time.sleep(1)
@@ -244,8 +245,10 @@ class Cli():
                     print(times)
 
             elif options[menu_entry_index] == 'Filter by time':
-                user_input = input(yellow('What time slot would you want to view ( 16:00 = 04:00 apm): '))
+                print(yellow('What time slot would you want to view ( 16:00 = 04:00 apm): '))
+                user_input = helpers.time_slots()
                 med_times_filter = medications.filter(Med_times.time_slot == user_input)
+
                 print(green(f'List of {user_input}:'))
                 for times in med_times_filter:
                     print(times)
@@ -253,7 +256,8 @@ class Cli():
             elif options[menu_entry_index] == 'Sign Off medication time slot':
                 print(green('Enter the client information and the time slot you want to sign off.'))
                 client_id = input(yellow('Enter a clients ID: '))
-                time_slot = input(yellow('Enter the time: '))
+                print(yellow('Enter the time: '))
+                time_slot = helpers.time_slots()
                 client_id_signoff = medications.filter(Med_times.client_id == client_id)
                 sign_off_time = client_id_signoff.filter(Med_times.time_slot == time_slot) 
                 print(sign_off_time[0])

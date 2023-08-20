@@ -2,13 +2,15 @@ import sessions
 from prettycli import red, yellow, green
 import time
 from simple_term_menu import TerminalMenu
+import helpers
 
 from  db.models import Doctor, Med_times, Client, Medication, Employee
 
 def handle_add_client():
     new_client_name = input(yellow('New client name: '))
-    new_client_age = input(yellow('New client age: '))
+    new_client_age = helpers.check_if_integer()
     doc_options = sessions.create_doctor_session()
+    print(new_client_age)
     
     print(yellow('What is the new clients primary doctor: '))
     options = []
@@ -53,5 +55,3 @@ def handle_add_med_times(user):
     sess.commit()
     print(green('The time slot has been added. '))
     time.sleep(1)
-
-handle_add_client()
