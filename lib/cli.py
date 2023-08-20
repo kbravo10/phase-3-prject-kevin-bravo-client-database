@@ -6,7 +6,7 @@ import ipdb
 from prettycli import red, green, yellow
 from simple_term_menu import TerminalMenu
 from  db.models import Doctor, Med_times, Client, Medication, Employee
-import create_inputs as create 
+import modify_database as modify
 import sessions
 import helpers
 
@@ -62,7 +62,7 @@ class Cli():
         self.clear_screen()
         #display welcome message and propmt the user to select a choice
         print(green('Welcome ')  + yellow(f'{self.current_user.name} \n'))
-        options = ['Clients', 'Doctors', 'Medications',  'Medication Schedule/Sign off time sheet', 'ADD INFORMATION', 'LOGOUT', 'EXIT']
+        options = ['Clients', 'Doctors', 'Medications',  'Medication Schedule/Sign off time sheet', 'ADD/REMOVE INFORMATION', 'LOGOUT', 'EXIT']
         terminal_menu = TerminalMenu(options)
         menu_entry_index = terminal_menu.show()
         #if the user chooses clients then take them to the handle_client_choice method
@@ -85,13 +85,15 @@ class Cli():
             print('You have selected medication schedule.')
             time.sleep(1)
             self.handle_med_schedule_choice()
-        elif options[menu_entry_index] == 'ADD INFORMATION':
-            self.handle_add_info()
-        
+        #user selects to add a client or a medication time slot
+        elif options[menu_entry_index] == 'ADD/REMOVE INFORMATION':
+            self.handle_modify_info()
+        #Lets the user log out of the class under there information
         elif options[menu_entry_index] == 'LOGOUT':
             print(f'Logging out. Bye {self.current_user.name}!')
             time.sleep(1)
             self.start()
+        #lets the user quit the program
         elif options[menu_entry_index] == 'EXIT':
             self.exit()
         self.clear_screen()
@@ -270,23 +272,33 @@ class Cli():
             time.sleep(1)
         self.home_screen()
     
-    def handle_add_info(self): 
+    def handle_modify_info(self): 
         return_home = False
         while return_home == False:
-            print('What information would you like to add: ')
+            print('What would you like to do? ')
+            modify_options = ['Remove', 'Add']
+            modify_terminal_menu = TerminalMenu(modify_options)
+            modify_menu_entry_index = modify_terminal_menu.show()
+
+            print(f'What information would you like to {modify_options[modify_menu_entry_index]}: ')
             options = ['Client', 'Medication Scheduling', 'Return to main window']
             terminal_menu = TerminalMenu(options)
             menu_entry_index = terminal_menu.show()
 
             if options[menu_entry_index] == 'Client':
-                create.handle_add_client()
+                if modify_options[modify_menu_entry_index] == 'Add':
+                    modify.handle_add_client()
+                else:
+                    modify.remove_client()
             elif options[menu_entry_index] == 'Medication Scheduling':
-                create.handle_add_med_times(self.current_user.id)
+                if modify_options[modify_menu_entry_index] == 'Add':
+                    modify.handle_add_med_times(self.current_user.id)
+                else:
+                    modify.remove_med_time()
             elif options[menu_entry_index] == 'Return to main window':
                 return_home = True 
         time.sleep(1)
         self.home_screen()
-
 
 app = Cli()
 app.start()

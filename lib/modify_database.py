@@ -53,3 +53,41 @@ def handle_add_med_times(user):
     sess.commit()
     print(green('The time slot has been added. '))
     time.sleep(1)
+
+def remove_client():
+    session = sessions.session_create()
+    print('Enter the clients information you wish to remove: ')
+    client_id = input('Enter client ID: ')
+    client = sessions.create_client_session().filter(Client.id == client_id)
+    if client.count() != 0:
+        time_slot = sessions.create_med_times_session().filter(Med_times.client_id == client_id)
+        for times in time_slot:
+            session.delete(times)
+            session.commit()
+        
+        session.delete(client[0])
+        session.commit()
+        print(green('The client has been removed, along with all the medicine time slots.'))
+    else:
+        print(red('The client is not in the database.'))
+
+
+
+def remove_med_time():
+    print('Enter the Medication schedule information you wish to remove: ')
+    med_time = helpers.time_slots()
+    client_id = input('Enter the clients ID for time slot: ')
+    client = sessions.create_med_times_session().filter(Med_times.client_id == client_id)
+    if client.count() != 0:
+        time_slot = client.filter(Med_times.time_slot == med_time)
+        if time_slot.count() != 0:
+            session = sessions.session_create()
+            session.delete(time_slot[0])
+            session.commit()
+            print(green('The time slot on the schedule has been removed'))
+        else:
+            print(red('The time slot is not in the database.'))
+    else:
+        print(red('The time slot is not in the database.'))
+
+remove_med_time()
