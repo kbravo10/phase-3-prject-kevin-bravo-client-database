@@ -7,6 +7,7 @@ from  db.models import Doctor, Med_times, Client, Medication, Employee
 import art
 import modify_database as modify
 import sessions
+import validate
 import helpers
 
 class Cli():
@@ -291,7 +292,7 @@ class Cli():
             #filters and displays a pecific time
             elif options[menu_entry_index] == 'Sign Off medication time slot':
                 print(green('Enter the client information and the time slot you want to sign off.'))
-                client_id = input(yellow('Enter a clients ID: '))
+                client_id = validate.validate_client_id()
                 time_slot = helpers.time_slots()
                 client_id_signoff = medications.filter(Med_times.client_id == client_id)
                 sign_off_time = client_id_signoff.filter(Med_times.time_slot == time_slot) 
