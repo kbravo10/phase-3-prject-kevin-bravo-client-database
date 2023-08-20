@@ -1,8 +1,6 @@
 
 #import random to random fill values
-import random
 import time
-import ipdb
 from prettycli import red, green, yellow
 from simple_term_menu import TerminalMenu
 from  db.models import Doctor, Med_times, Client, Medication, Employee
@@ -16,7 +14,7 @@ class Cli():
     
     #method to help with the cluter by printing empty lines
     def clear_screen(self):
-        print('\n' * 15)
+        print('\n' * 60)
 
     #method start to prompt the user how to start and the options
     def start(self):
@@ -37,8 +35,11 @@ class Cli():
     def login(self):
         self.clear_screen()
         logged_in = False
-        print('Please Log in: ')
+        print('Please Log in: ') 
+        print('FOR TESTING YOU CAN USE: ')
+        print(green('userOne@google.com'))
         user_input = input(yellow('email: '))
+       
         #find an owner by email 
         employees = sessions.create_employee_session().all()
         for employee in employees:

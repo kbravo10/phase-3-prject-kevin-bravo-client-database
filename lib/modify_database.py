@@ -29,6 +29,7 @@ def handle_add_client():
     session.add(new_client)
     session.commit()
     print(green('New client has been added.'))
+    print('\n')
     time.sleep(1)
 
 def handle_add_med_times(user):
@@ -52,6 +53,7 @@ def handle_add_med_times(user):
     sess.add(new_medicatiion_slot)
     sess.commit()
     print(green('The time slot has been added. '))
+    print('\n')
     time.sleep(1)
 
 def remove_client():
@@ -70,6 +72,7 @@ def remove_client():
         print(green('The client has been removed, along with all the medicine time slots.'))
     else:
         print(red('The client is not in the database.'))
+    print('\n')
 
 
 
@@ -89,6 +92,4 @@ def remove_med_time():
             print(red('The time slot is not in the database.'))
     else:
         print(red('The time slot is not in the database.'))
-
-# s = sessions.create_medication_session()
-# print(s[1].clients.id)
+    print('\n')
