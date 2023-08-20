@@ -12,9 +12,10 @@ def time_slots():
     return(options[menu_entry_index])
 
 def check_if_integer(user_promp):
-    num = input(yellow(user_promp))
-    if num.isdigit():
-            return int(num)
-    else:
-        print(red('Value must be a number.'))
-        check_if_integer()
+    good_input = False
+    while good_input == False:
+        num = input(yellow(user_promp))
+        if num.isdigit():
+                return int(num)
+        else:
+            print(red('Value must be a number.'))

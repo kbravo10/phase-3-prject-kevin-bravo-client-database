@@ -140,6 +140,12 @@ class Cli():
                 if client_filter_id.count() != 0:
                     for client in client_filter_id:
                         print(client)
+                        print(green(f'Medications perscribed: '))
+                        for meds in client.medications:
+                            print(meds.medications.name)
+                        print(green(f'Medication schedule for {client.name}'))
+                        for times in client.medications:
+                            print(times)
                 else:
                     print(red('invalid...There is no client with that id.'))
             else:
@@ -171,6 +177,9 @@ class Cli():
                     print(green('Doctor(s): '))
                     for doc in doctor_filter_name:
                         print(doc)
+                        print(green('List of clients'))
+                        for client in doc.clients:
+                            print(f'{client.name}, ID: {client.id}')
                 else:
                     print(red('There is no doctor with that name on the database.'))
             elif options[menu_entry_index] == 'Search by ID':
@@ -179,6 +188,9 @@ class Cli():
                 if doctor_filter_id.count() != 0:
                     print(green('Doctor: '))
                     print(doctor_filter_id[0])
+                    print(green('List of clients'))
+                    for client in doctor_filter_id[0].clients:
+                        print(f'{client.name}, ID: {client.id}')
                 else:
                     print(red('There is no doctor with this ID.'))
             else:
@@ -276,27 +288,30 @@ class Cli():
         return_home = False
         while return_home == False:
             print('What would you like to do? ')
-            modify_options = ['Remove', 'Add']
+            modify_options = ['Remove', 'Add', 'Return to main window']
             modify_terminal_menu = TerminalMenu(modify_options)
             modify_menu_entry_index = modify_terminal_menu.show()
 
-            print(f'What information would you like to {modify_options[modify_menu_entry_index]}: ')
-            options = ['Client', 'Medication Scheduling', 'Return to main window']
-            terminal_menu = TerminalMenu(options)
-            menu_entry_index = terminal_menu.show()
+            if modify_options[modify_menu_entry_index] == 'Return to main window':
+                return_home = True
+            else:
+                print(f'What information would you like to {modify_options[modify_menu_entry_index]}: ')
+                options = ['Client', 'Medication Scheduling', 'Return to main window']
+                terminal_menu = TerminalMenu(options)
+                menu_entry_index = terminal_menu.show()
 
-            if options[menu_entry_index] == 'Client':
-                if modify_options[modify_menu_entry_index] == 'Add':
-                    modify.handle_add_client()
-                else:
-                    modify.remove_client()
-            elif options[menu_entry_index] == 'Medication Scheduling':
-                if modify_options[modify_menu_entry_index] == 'Add':
-                    modify.handle_add_med_times(self.current_user.id)
-                else:
-                    modify.remove_med_time()
-            elif options[menu_entry_index] == 'Return to main window':
-                return_home = True 
+                if options[menu_entry_index] == 'Client':
+                    if modify_options[modify_menu_entry_index] == 'Add':
+                        modify.handle_add_client()
+                    else:
+                        modify.remove_client()
+                elif options[menu_entry_index] == 'Medication Scheduling':
+                    if modify_options[modify_menu_entry_index] == 'Add':
+                        modify.handle_add_med_times(self.current_user.id)
+                    else:
+                        modify.remove_med_time()
+                elif options[menu_entry_index] == 'Return to main window':
+                    return_home = True 
         time.sleep(1)
         self.home_screen()
 

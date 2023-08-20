@@ -9,6 +9,7 @@ from  db.models import Doctor, Med_times, Client, Medication, Employee
 def handle_add_client():
     new_client_name = input(yellow('New client name: '))
     new_client_age = helpers.check_if_integer('New client age: ')
+    new_client_age = int(new_client_age)
     doc_options = sessions.create_doctor_session()
     print(yellow('What is the new clients primary doctor: '))
     options = []
@@ -89,5 +90,3 @@ def remove_med_time():
             print(red('The time slot is not in the database.'))
     else:
         print(red('The time slot is not in the database.'))
-
-remove_med_time()
