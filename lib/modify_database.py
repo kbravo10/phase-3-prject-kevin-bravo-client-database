@@ -90,3 +90,6 @@ def remove_med_time():
             print(red('The time slot is not in the database.'))
     else:
         print(red('The time slot is not in the database.'))
+
+# s = sessions.create_medication_session()
+# print(s[1].clients.id)

@@ -44,7 +44,7 @@ if __name__ == '__main__':
     meds = {
         'Adderall':'Adderall is used to treat attention deficit hyperactivity disorder (ADHD) and narcolepsy.',
         'Atorvastatin':"It's used to help lower cholesterol and fat levels in your blood",
-        'Levothyroxine':" Levothyroxine is a man-made hormone that is used to treat hypothyroidism. Hypothyroidism is a condition where your thyroid doesn't produce enough thyroid hormone naturally.",
+        'Levothyroxine':"Levothyroxine is a man-made hormone that is used to treat hypothyroidism. Hypothyroidism is a condition where your thyroid doesn't produce enough thyroid hormone naturally.",
         'Lisinopril':"Lisinopril is a type of angiotensin-converting enzyme (ACE) inhibitor used to treat high blood pressure.",
         'Metformin' : "Metformin is used to treat type 2 diabetes",
         'Albuterol' :"Albuterol is used to treat bronchospasm, which is when your airways spasm and tighten and make it hard to breathe.",
@@ -83,10 +83,10 @@ if __name__ == '__main__':
         'userFour@google.com',
     ]
     employees = []
-    for i in range(4):
+    for i in range(len(emails)):
         employee = Employee(
             name = fake.unique.name(),
-            username = random.choice(emails),
+            username = emails[i],
             password = fake.unique.name(),
         )
         session.add(employee)
@@ -101,7 +101,7 @@ if __name__ == '__main__':
             times = Med_times(
                 time_slot = str(4 * (i + 1)) + ':00',
                 dose = 'NA',
-                signed_off = '',
+                signed_off = 'NOT SIGNED OFF',
                 client_id = client.id,
                 medication_id = medication.id,
             )

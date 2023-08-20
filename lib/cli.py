@@ -16,7 +16,7 @@ class Cli():
     
     #method to help with the cluter by printing empty lines
     def clear_screen(self):
-        print('\n' * 3)
+        print('\n' * 15)
 
     #method start to prompt the user how to start and the options
     def start(self):
@@ -101,6 +101,7 @@ class Cli():
     #handle option of clients from home screen
     def handle_client_choice(self):
         return_home = False
+        #while loop to loop on method until user ready to leave
         while return_home == False:
             self.clear_screen()
             print(yellow('Choose an option: \n'))
@@ -138,6 +139,7 @@ class Cli():
                 user_input = input(yellow('What is the clients id: '))
                 client_filter_id = clients.filter(Client.id == user_input)
                 if client_filter_id.count() != 0:
+                    print(green('Client: '))
                     for client in client_filter_id:
                         print(client)
                         print(green(f'Medications perscribed: '))
@@ -146,17 +148,21 @@ class Cli():
                         print(green(f'Medication schedule for {client.name}'))
                         for times in client.medications:
                             print(times)
+                    print('\n')
                 else:
                     print(red('invalid...There is no client with that id.'))
+            #breaks the loop and lets user go back to home screen
             else:
                 return_home = True
-            time.sleep(1)
+            input(yellow('Press any key When ready.'))
         self.home_screen()
         
     def handle_doctor_choice(self):
         return_home = False
+
         while return_home == False:
             self.clear_screen()
+            print('Choose and option: ')
             #display options for doctor class and prompt user to select
             options = ['View all doctors', 'Search by name', 'Search by ID', 'Return to main screen']
             terminal_menu = TerminalMenu(options)
@@ -182,6 +188,7 @@ class Cli():
                             print(f'{client.name}, ID: {client.id}')
                 else:
                     print(red('There is no doctor with that name on the database.'))
+            #handle the user wanting to search by id
             elif options[menu_entry_index] == 'Search by ID':
                 user_input = input(yellow('Enter the doctors ID: '))
                 doctor_filter_id = doctors.filter(Doctor.id == user_input)
@@ -193,15 +200,17 @@ class Cli():
                         print(f'{client.name}, ID: {client.id}')
                 else:
                     print(red('There is no doctor with this ID.'))
+            #breaks loop and allows the user to return to main screen
             else:
                 return_home = True
-            time.sleep(1)
+            input(yellow('Press any key When ready.'))
         self.home_screen()
 
     def handle_medication_choice(self):
         return_home = False
         while return_home == False:
             self.clear_screen()
+            print('Choose an option: ')
             #display options for medications class and prompt user to select
             options = ['View all medications', 'Search by name', 'Search by ID', 'Return to main screen']
             terminal_menu = TerminalMenu(options)
@@ -233,12 +242,16 @@ class Cli():
                 user_input = input(yellow('What is the medication id: '))
                 medication_filter_id = medications.filter(Medication.id == user_input)
                 if medication_filter_id.count() != 0:
+                    print(green('List of medications: '))
                     print(medication_filter_id[0])
+                    print(green('List of clients on Medication- '))
+                    for client in medication_filter_id[0].clients:
+                        print(f'{client.clients.name}, ID: {client.clients.id}')
                 else:
                     print(red('There is no medication with that id.'))
             else:
                 return_home = True
-            time.sleep(1)
+            input(yellow('Press any key When ready.'))
         self.home_screen()
 
     def handle_med_schedule_choice(self):
