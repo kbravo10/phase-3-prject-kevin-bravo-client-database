@@ -1,7 +1,7 @@
 # Doctor Kevin House
 - Please run pipenv shell
 - cd into the lib directory
-- run Python seed_2.py
+- run Python seed_2.py to populate the database with data
 - once finshed run Python cli.py to start the program
 
 ## Project requirements
@@ -185,3 +185,153 @@ If the user chooses the _filter_by_time_ option they will prompted by a list of 
 
 ![Alt text](image-6.png)
 
+![Alt text](image-7.png)
+
+Just like all the other options before there is option _return to main screen_ that will break the while loop and return the user to tye main screen.
+
+### def handle_modify_info(self)
+
+The final option _ADD/REMOVE INFORMATION_ is so that the user can remove and add data to the database. The user is prompted to select an option
+
+![Alt text](image-8.png)
+
+#### REMOVE
+If the user selects remove they arte then promted to choose between client and medication scheduling. 
+
+![Alt text](image-9.png)
+
+If the user selects clients they are promted to either select a client or a time schedule. If the user selects client they are prompted to enter the clients id they wish to remove. 
+
+    for times in time_slot:
+        session.delete(times)
+        session.commit()
+    
+    session.delete(client[0])
+    session.commit()
+The code above takes a filtered version of the object and deletes all the instances if that client is in the client table and also deletes any instances of their medication schedule. 
+If the user chooses medication schedule the user is prompted to select a time slot. 
+
+![Alt text](image-6.png)
+
+The the user is promted to eneter a clients id. Once the user has eneterd there options the time slot will be remove from the table and from the dataframe. 
+
+    time_slot = client.filter(Med_times.time_slot == med_time)
+    if time_slot.count() != 0:
+        session = sessions.session_create()
+        session.delete(time_slot[0])
+        session.commit()
+        print(green('The time slot on the schedule has been removed'))
+
+#### ADD
+If the user selcts _add_ a similar screen will appear promting the user to select between client and medication schedule. If the user selects client the user will be promted to enter new clients name, age, their primary doctor, and if the user is signing off the time slot. If the user selects that they are going to sign off the new instance is created with the information that the user provided. 
+
+    new_client = Client(
+        name = new_client_name,
+        age = new_client_age,
+        doctor_id = new_client_doc,
+    )
+    session = sessions.session
+    session.add(new_client)
+    session.commit()
+If the user selects to add a medication schedule, the user is promted to select a time slot. A client id is then required to distinguise who the medication schedule this is is being made for. The user is prompted to eneter a medication id to be able to know what medication needs to be distributed at that time. Finally the user is asked i they are signing off the slot with their id. If the user selects yes then the time slot is created with the provided information and with the users id as the signed off value for that instance. If the user selects no then the slot is still created exept the signed_off value becomes NOT SIGNED OFF. 
+
+![Alt text](image-10.png)
+
+    new_medicatiion_slot = Med_times(
+        time_slot = new_time_slot,
+        dose = new_dose,
+        signed_off = new_sign_off,
+        client_id = new_client_id,
+        medication_id = new_med_id,
+    )
+
+### LOGOUT
+If the user decides that they are done using the program but dont want to exit the program and maybe let another user login they can select the logout option. 
+
+![Alt text](image-11.png)
+
+This option will log the user out by sendinf them to the calling login(). This will return the user to the login page where the nect user can log in or exit the program.
+
+### EXIT
+This option does the same thing that the original exit option does. It calls the exit() method and quits the project all together. 
+
+## modyfy_database.py
+This file is the file that holds all the methods i used to modify the database and classes. They prevented me from cluttering my cli file and also made it easier to debug when i had an issue. 
+In this file is where the methods to add and remove instances of classes live. 
+
+## sessions.py
+In this file i craeted the session of each object and returned them to use them whenever i needed them. This helped me prevent repeating code to make new sessions everytime i enetered a new option in the project.
+
+    from sqlalchemy import create_engine
+    from sqlalchemy.orm import sessionmaker
+    from sqlalchemy.ext.declarative import declarative_base
+
+    from  db.models import Doctor, Med_times, Client, Medication, Employee
+
+    Base = declarative_base()
+    engine = create_engine('sqlite:///db/client_database.db')
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    def session_create():
+        return session
+
+### helper.py and validate.py
+These files help me write a method to validate inputs and print the options of wthje time displays. They help shorten my code and easier to debug. 
+    
+    def check_if_integer(user_promp):
+    good_input = False
+    while good_input == False:
+        num = input(yellow(user_promp))
+        if num.isdigit():
+                return int(num)
+        else:
+            print(red('Value must be a number.'))
+The top snippet is an example of a method that helps me validate the user inputs a valid integer when integer is required. 
+
+### models.py
+In this file I made all the migrations that made my classes into tables for my database. I used sqlalchemy and alembic packages. Every time I added a class, added a column, or added some kind of relationship I would run 
+
+    alembic revision --autogenerate -m 'message'
+
+This made every migrations add to my table or attributes to specific tables. The Doctor class has a one-to-many relationship with the client class. Every doctor a=can have many clients and many clients can have the same doctor. In the client class i used a foreign key argument for a column to link the doctors id to the doctor class and help me find the specific doctor that belonged to the client. In Doctor class i assigned an attribute that linked the doctor class to the client class and when called, it retured a list of all the clients that belonged to that doctor. This was all posible with the id of the doctor.
+This is similar how i created the relationship between employee and med-times. Many med times can have an employee and one medtime can only have one employee. 
+For many-to-many realationships i linked the client class to the medacation class using another class Med_times. This class took 2 foreing keys, one from the client and one from the medication. This is how i created the relationship between clients and medications and displayed it in a table.  
+All of the classes have a primary key that is an id and columns that have data to make the table make sence and valuable. The tables where used in my cli project to display the data in an organized simple way to see and I used sqlalchemy to be able to create a project to filter, modify, add, and remove information using metadata of the client_database.db.
+
+
+
+## Contributations
+Pull request are appreciated. Any feed back on improving the project(do's and dont's).
+
+## Citations
+All medications exept adderal:
+- Brennan, D. (2021, October 4). What are the top 10 most prescribed drugs?. MedicineNet. https://www.medicinenet.com/what_are_the_top_10_most_prescribed_drugs/article.htm 
+
+Adderal description and name:
+- Durbin, K. (n.d.). Adderall: Uses, dosage, Side Effects &amp; Safety Info. Drugs.com. https://www.drugs.com/adderall.html 
+
+
+### Licence
+MIT License
+
+Copyright (c) 2023-present Kevin Bravo
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
