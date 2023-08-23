@@ -126,3 +126,43 @@ Once the user is done with the doctor option, they can choose the final option o
 
     self.home_screen()
 ### def handle_medication_choice(self)
+If the user selects the Medication option it takes them to the 'medication screen'. This part of the project is similar to the other sections that came before. it has the opstion of selecting to see all the medications, search by name, search by id or return to main screen.
+
+![Alt text](image-2.png)
+If the user selects _View all medications_ a list of all the medications will be desplayed along with their id and a small description of every medication.
+If the use decides to search by name then the user is propmted to enter the name of the medication. If the medication is in the database then the screen will print the name of the information on the madeication along with a list of clients that take that specific medication. 
+
+![Alt text](image-3.png)
+
+The same result and procedure is required if the user wants to search for a medication based on the id of the medication. The use is prompted to enter the id of a specific medication and then the information is displayed along with a list of all the clients that take that medication. 
+![Alt text](image-4.png)
+Once the user is done with the medication option they can select return to main screen to break the while loop and return to the home screen.
+
+### def handle_med_schedule_choice(self)
+This option is a little different from the rest of the options. It has a a list of options 
+
+    options = [
+        'Sign Off medication time slot', 
+        'View medication schedule', 
+        'Filter by time', 
+        'Return to main screen'
+    ]
+    terminal_menu = TerminalMenu(options)
+    menu_entry_index = terminal_menu.show()
+If the user selects _Sign Off medication time slot_ it prompts them to enter a clients id, the value must be valid or else it will display an error and promt you again. Then the user is given a list of time slots to choose from, from 4:00 to 24:00 in intervals of 4. 
+
+    print(green('Enter the client information and the time slot you want to sign off.'))
+    client_id = validate.validate_client_id()
+    time_slot = helpers.time_slots()
+    client_id_signoff = medications.filter(Med_times.client_id == client_id)
+    sign_off_time = client_id_signoff.filter(Med_times.time_slot == time_slot) 
+    print(sign_off_time[0])
+    user_input = input(green('Is this correct? (Y/N): '))
+    if user_input == 'y'or user_input =='Y' or user_input =='yes'or user_input == 'Yes':
+        sign_off_time[0].signed_off = self.current_user.id
+        sessions.session_create().commit()
+        print(yellow(str(sign_off_time[0]))) 
+        print(green('\thas been signed by you.')) 
+    else:
+        print(red('SIGN OFF WAS NOT SUCCESSFUL'))
+After the user has selected both a valib client id and a time slot, if it exists in the database, the user will be prompted to answer if they to sign off this time slot. If yes then the table will be mofied to display and have a new value of the current users id as the sign off. If the user decides no, then the table and values stay the same.
