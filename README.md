@@ -71,3 +71,58 @@ If the use chooses _Search by name_, the user is then promted to eneter a client
         print(green(f'Medication schedule for {client.name}'))
         for times in client.medications:
             print(times)
+if the user selects _search by id_ then the user is prompted to input an ID of a specific client. The id is specific because there may be multiple cliets with same exact name but we can distiguise them by there id. Once the user inputs there ID thed filter method searches for the ID just like the name as described in the previus option. The id holder is then printed out along with the medications times that the cliet has. 
+
+    print(green('Client: '))
+    for client in client_filter_id:
+        print(client)
+        print(green(f'Medications perscribed: '))
+        for meds in client.medications:
+            print(meds.medications.name)
+        print(green(f'Medication schedule for {client.name}'))
+        for times in client.medications:
+            print(times)
+if the user selects the final option of _Return to main screen_ then the return_home value becomes True
+
+
+    else:
+        return_home = True
+This breaks the while loop and returns the user to the home screen where they are prompnted again to choose from wich table they want to see data, along with the classes relationships with other classes.
+
+### def handle_doctor_choice(self)
+The doctor choice is similar to the client method. There is a while loop that loops until the user decides to return to the main screen, _Return to main screen_. The options for the doctor class are very similar to the clients.
+
+    options = [
+        'View all doctors', 
+        'Search by name', 
+        'Search by ID', 
+        'Return to main screen'
+    ]
+    terminal_menu = TerminalMenu(options)
+    menu_entry_index = terminal_menu.show()
+if the user selcts _View all doctors_ a list of all the doctors in the doctors table will print out. The data that prints is the return data from the repr() method in located in all the classes. 
+
+     if options[menu_entry_index] == 'View all doctors':
+        print(green('LIST OF ALL DOCTORS: '))
+        for doctor in doctors.all():
+            print(doctor)
+![Alt text](image-1.png)
+If the user wishes to search the doctor by name they are prompted to type the name of the doctor. If the doctor is in the database all the doctors with that name will then be printed out along with all of there clients that they take care of. 
+
+    print(green('Doctor(s): '))
+    for doc in doctor_filter_name:
+        print(doc)
+        print(green('List of clients'))
+        for client in doc.clients:
+            print(f'{client.name}, ID: {client.id}')
+Similar to choosing _Search by name_, if the user wishes to look for the doctor based on a more precise way, there id, they can do that by choosing the _search by id_ option. The user is promted to eneter the doctors id. If the id is a valid id then the doctors information is displayed along with a list of there specific clients. 
+
+    print(green('Doctor: '))
+        print(doctor_filter_id[0])
+        print(green('List of clients'))
+        for client in doctor_filter_id[0].clients:
+            print(f'{client.name}, ID: {client.id}')
+Once the user is done with the doctor option, they can choose the final option of _return to home screen_ which will set the return_home = True and break the while loop sending the user back to the home screen to select another choice. 
+
+    self.home_screen()
+### def handle_medication_choice(self)
