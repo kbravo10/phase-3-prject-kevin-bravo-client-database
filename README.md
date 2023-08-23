@@ -40,6 +40,7 @@ The terminal displays a message of my project name, _DOCTOR-KEVIN_HOUSE_, and a 
 
 ### Home 
 A greeting will be displayed showing the current users name. A few options will be displayed allowing the user to choose one of the options and continue with tye program as they need. 
+
 ![Alt text](image.png)
 
 ### def handle_client_Choice(self)
@@ -106,7 +107,9 @@ if the user selcts _View all doctors_ a list of all the doctors in the doctors t
         print(green('LIST OF ALL DOCTORS: '))
         for doctor in doctors.all():
             print(doctor)
+
 ![Alt text](image-1.png)
+
 If the user wishes to search the doctor by name they are prompted to type the name of the doctor. If the doctor is in the database all the doctors with that name will then be printed out along with all of there clients that they take care of. 
 
     print(green('Doctor(s): '))
@@ -129,13 +132,16 @@ Once the user is done with the doctor option, they can choose the final option o
 If the user selects the Medication option it takes them to the 'medication screen'. This part of the project is similar to the other sections that came before. it has the opstion of selecting to see all the medications, search by name, search by id or return to main screen.
 
 ![Alt text](image-2.png)
+
 If the user selects _View all medications_ a list of all the medications will be desplayed along with their id and a small description of every medication.
 If the use decides to search by name then the user is propmted to enter the name of the medication. If the medication is in the database then the screen will print the name of the information on the madeication along with a list of clients that take that specific medication. 
 
 ![Alt text](image-3.png)
 
 The same result and procedure is required if the user wants to search for a medication based on the id of the medication. The use is prompted to enter the id of a specific medication and then the information is displayed along with a list of all the clients that take that medication. 
+
 ![Alt text](image-4.png)
+
 Once the user is done with the medication option they can select return to main screen to break the while loop and return to the home screen.
 
 ### def handle_med_schedule_choice(self)
@@ -166,3 +172,16 @@ If the user selects _Sign Off medication time slot_ it prompts them to enter a c
     else:
         print(red('SIGN OFF WAS NOT SUCCESSFUL'))
 After the user has selected both a valib client id and a time slot, if it exists in the database, the user will be prompted to answer if they to sign off this time slot. If yes then the table will be mofied to display and have a new value of the current users id as the sign off. If the user decides no, then the table and values stay the same.
+
+![Alt text](image-5.png)
+
+If the user chooses _View medication schedule_ the entire medication schedile will print. 
+
+    if options[menu_entry_index] == 'View medication schedule':
+        print(green('MEDICATION SCHEDULE: '))
+        for times in medications.all():
+            print(times)
+If the user chooses the _filter_by_time_ option they will prompted by a list of time slots. Depending onm the choice, all the time slots with that value will print. 
+
+![Alt text](image-6.png)
+
