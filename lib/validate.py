@@ -23,3 +23,15 @@ def validate_medication_id():
             return int(user_input)
         else:
             print(red('There is no medication with that id.'))
+
+def search_by(search_item, object):
+    x = False
+    while x == False:
+        user_input = input(f'What is the {search_item} name: ')
+        session = sessions.session_create()
+        filter_name = session.query(object).filter(object.name == user_input)
+        if filter_name.count() != 0:
+            return filter_name
+        else:
+            print(red(f'There is no {search_item} with that name.'))
+

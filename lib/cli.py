@@ -60,6 +60,7 @@ class Cli():
     def exit(self):
         self.clear_screen()
         print('Thank you. Bye!')
+        sessions.session_create().close()
         quit()
 
     #home screen that gives userr options of clients, medications and doctors
@@ -126,21 +127,22 @@ class Cli():
                     print(client)
             #Allow the user to enter a specific name and look for that clients information
             elif options[menu_entry_index] == 'Search by name':
-                user_input = input(yellow('What is the clients name: '))
-                client_filter_name = clients.filter(Client.name == user_input)
-                self.clear_screen()
-                if client_filter_name.count() != 0:
-                    print(green('Client(s):'))
-                    for client in client_filter_name:
-                        print(client)
-                        print(green(f'Medications perscribed: '))
-                        for meds in client.medications:
-                            print(meds.medications.name)
-                        print(green(f'Medication schedule for {client.name}'))
-                        for times in client.medications:
-                            print(times)
-                else:
-                    print(red('There is no client with that name.'))
+                # user_input = input(yellow('What is the clients name: '))
+                # client_filter_name = clients.filter(Client.name == user_input)
+                # self.clear_screen()
+                # if client_filter_name.count() != 0:
+                client_filter_name = validate.search_by('Client', Client)
+                print(green('Client(s):'))
+                for client in client_filter_name:
+                    print(client)
+                    print(green(f'Medications perscribed: '))
+                    for meds in client.medications:
+                        print(meds.medications.name)
+                    print(green(f'Medication schedule for {client.name}'))
+                    for times in client.medications:
+                        print(times)
+                # else:
+                #     print(red('There is no client with that name.'))
             #Allow the user to search a client with there id number
             elif options[menu_entry_index] == 'Search by ID':
                 user_input = input(yellow('What is the clients id: '))

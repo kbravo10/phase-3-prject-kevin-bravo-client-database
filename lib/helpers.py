@@ -19,3 +19,4 @@ def check_if_integer(user_promp):
                 return int(num)
         else:
             print(red('Value must be a number.'))
+
