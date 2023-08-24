@@ -1,9 +1,12 @@
 # Doctor Kevin House
+## instructions to start the project
 - Please run pipenv shell
 - cd into the lib directory
 - run Python seed_2.py to populate the database with data
 - once finshed run Python cli.py to start the program
 
+### You Tube video
+https://youtu.be/GOlQYxRkiJg?si=Wga2khGuJL_qfvZw
 ## Project requirements
 
 In this project, we're going to use these skills to create a CLI. You won't be able to fit everything in from phase 3, but the following are the minimum requirements:
