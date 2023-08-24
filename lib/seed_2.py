@@ -113,6 +113,3 @@ if __name__ == '__main__':
 
     session.close()
 
-import ipdb;ipdb.set_trace()
-
-
