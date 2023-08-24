@@ -57,9 +57,9 @@ class Medication(Base):
     clients = relationship('Med_times', back_populates='medications')
 
     def __repr__(self):
-        return f'Medication {self.id}, ' +\
-            f'{self.name}, medication description: \n' +\
-            f'\t {self.medication_use} \n\n'
+        return f'Medication {self.id}: ' +\
+            f'{self.name}\n \tMedication description: ' +\
+            f'{self.medication_use} \n\n'
 
 class Med_times(Base):
     __tablename__ = 'med_times'

@@ -127,27 +127,25 @@ class Cli():
                     print(client)
             #Allow the user to enter a specific name and look for that clients information
             elif options[menu_entry_index] == 'Search by name':
-                # user_input = input(yellow('What is the clients name: '))
-                # client_filter_name = clients.filter(Client.name == user_input)
-                # self.clear_screen()
-                # if client_filter_name.count() != 0:
+                #get the user input and validate the users input name
                 client_filter_name = validate.search_by('Client', Client)
+                #display the client info and display all medication related to that client
+                print('\n')
                 print(green('Client(s):'))
                 for client in client_filter_name:
                     print(client)
                     print(green(f'Medications perscribed: '))
                     for meds in client.medications:
                         print(meds.medications.name)
+                    print('\n')
                     print(green(f'Medication schedule for {client.name}'))
                     for times in client.medications:
                         print(times)
-                # else:
-                #     print(red('There is no client with that name.'))
             #Allow the user to search a client with there id number
             elif options[menu_entry_index] == 'Search by ID':
-                user_input = input(yellow('What is the clients id: '))
-                client_filter_id = clients.filter(Client.id == user_input)
-                if client_filter_id.count() != 0:
+                client_filter_id = validate.validate_id('Client', Client)
+                if client_filter_id != None:
+                    print('\n')
                     print(green('Client: '))
                     for client in client_filter_id:
                         print(client)
@@ -157,9 +155,6 @@ class Cli():
                         print(green(f'Medication schedule for {client.name}'))
                         for times in client.medications:
                             print(times)
-                    print('\n')
-                else:
-                    print(red('invalid...There is no client with that id.'))
             #breaks the loop and lets user go back to home screen
             else:
                 return_home = True
@@ -168,11 +163,10 @@ class Cli():
         
     def handle_doctor_choice(self):
         return_home = False
-
         while return_home == False:
             self.clear_screen()
             art.tprint("DOCTOR'S")
-            print('Choose and option: ')
+            print(yellow('Choose an option: '))
             #display options for doctor class and prompt user to select
             options = ['View all doctors', 'Search by name', 'Search by ID', 'Return to main screen']
             terminal_menu = TerminalMenu(options)
@@ -187,29 +181,24 @@ class Cli():
                     print(doctor)
             #handle search by name
             elif options[menu_entry_index] == 'Search by name':
-                user_input = input(yellow('Enter the doctors name: '))
-                doctor_filter_name = doctors.filter(Doctor.name == user_input)
-                if doctor_filter_name.count() != 0:
-                    print(green('Doctor(s): '))
-                    for doc in doctor_filter_name:
-                        print(doc)
-                        print(green('List of clients'))
-                        for client in doc.clients:
-                            print(f'{client.name}, ID: {client.id}')
-                else:
-                    print(red('There is no doctor with that name on the database.'))
+                #get the user input and validate the users input name for doctor
+                doctor_filter_name = validate.search_by('Doctor', Doctor)
+                print('\n')
+                print(green('Doctor(s): '))
+                for doc in doctor_filter_name:
+                    print(doc)
+                    print(green('List of clients'))
+                    for client in doc.clients:
+                        print(f'{client.name}, ID: {client.id}')
             #handle the user wanting to search by id
             elif options[menu_entry_index] == 'Search by ID':
-                user_input = input(yellow('Enter the doctors ID: '))
-                doctor_filter_id = doctors.filter(Doctor.id == user_input)
-                if doctor_filter_id.count() != 0:
+                doctor_filter_id = validate.validate_id('Doctor', Doctor)
+                if doctor_filter_id != None:
                     print(green('Doctor: '))
                     print(doctor_filter_id[0])
                     print(green('List of clients'))
                     for client in doctor_filter_id[0].clients:
                         print(f'{client.name}, ID: {client.id}')
-                else:
-                    print(red('There is no doctor with this ID.'))
             #breaks loop and allows the user to return to main screen
             else:
                 return_home = True
@@ -221,7 +210,7 @@ class Cli():
         while return_home == False:
             self.clear_screen()
             art.tprint("MEDICATION'S")
-            print('Choose an option: ')
+            print(yellow('Choose an option: '))
             #display options for medications class and prompt user to select
             options = ['View all medications', 'Search by name', 'Search by ID', 'Return to main screen']
             terminal_menu = TerminalMenu(options)
@@ -236,30 +225,26 @@ class Cli():
                     print(med)
             #Allow the user to enter a specific name and look for that medications information
             elif options[menu_entry_index] == 'Search by name':
-                user_input = input(yellow('What is the medications name: '))
-                medication_filter_name = medications.filter(Medication.name == user_input)
-                self.clear_screen()
-                if medication_filter_name.count() != 0:
+                #get the user input and validate the users input name for medication
+                medication_filter_name = validate.search_by('Meication', Medication)
+                if medication_filter_name != None:
+                    print('\n')
                     print(green('Medications(s):'))
                     for meds in medication_filter_name:
                         print(meds)
                         print(green(f'List of clients on Medication- {meds.name}:'))
                         for client in meds.clients:
                             print(f'{client.clients.name}, ID: {client.clients.id}')
-                else:
-                    print(red('There is no medication with that name.'))
             #Allow the user to search a medications with there id number
             elif options[menu_entry_index] == 'Search by ID':
-                user_input = input(yellow('What is the medication id: '))
-                medication_filter_id = medications.filter(Medication.id == user_input)
-                if medication_filter_id.count() != 0:
+                medication_filter_id = validate.validate_id('Medication', Medication)
+                if medication_filter_id != None:
+                    print('\n')
                     print(green('List of medications: '))
                     print(medication_filter_id[0])
                     print(green('List of clients on Medication- '))
                     for client in medication_filter_id[0].clients:
                         print(f'{client.clients.name}, ID: {client.clients.id}')
-                else:
-                    print(red('There is no medication with that id.'))
             else:
                 return_home = True
             input(yellow('Press any key When ready.'))
@@ -294,9 +279,10 @@ class Cli():
             #filters and displays a pecific time
             elif options[menu_entry_index] == 'Sign Off medication time slot':
                 print(green('Enter the client information and the time slot you want to sign off.'))
-                client_id = validate.validate_client_id()
+                client_id = validate.validate_id('Client', Client)
                 time_slot = helpers.time_slots()
-                client_id_signoff = medications.filter(Med_times.client_id == client_id)
+                print(client_id[0].id)
+                client_id_signoff = medications.filter(Med_times.client_id == client_id[0].id)
                 sign_off_time = client_id_signoff.filter(Med_times.time_slot == time_slot) 
                 print(sign_off_time[0])
                 user_input = input(green('Is this correct? (Y/N): '))
